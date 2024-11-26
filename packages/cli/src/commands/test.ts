@@ -6,8 +6,8 @@ import { filesystem, patching, print, system } from 'gluegun';
 import yaml from 'js-yaml';
 import semver from 'semver';
 import { Args, Command, Flags } from '@oclif/core';
-import { GRAPH_CLI_SHARED_HEADERS } from '../constants';
-import fetch from '../fetch';
+import { GRAPH_CLI_SHARED_HEADERS } from '../constants.js';
+import fetch from '../fetch.js';
 
 export default class TestCommand extends Command {
   static description = 'Runs rust binary for subgraph testing.';
@@ -62,7 +62,7 @@ export default class TestCommand extends Command {
     if (filesystem.exists('matchstick.yaml')) {
       try {
         // Load the config
-        const config = await yaml.load(filesystem.read('matchstick.yaml', 'utf8')!);
+        const config: any = await yaml.load(filesystem.read('matchstick.yaml', 'utf8')!);
         // Check if matchstick.yaml and testsFolder not null
         if (config?.testsFolder) {
           // assign test folder from matchstick.yaml if present
@@ -221,8 +221,8 @@ async function getPlatform(
         return majorVersion === 18
           ? 'binary-linux-18'
           : majorVersion === 22
-          ? 'binary-linux-22'
-          : 'binary-linux-20';
+            ? 'binary-linux-22'
+            : 'binary-linux-20';
       }
     }
   }

@@ -1,9 +1,8 @@
 import { URL } from 'url';
 import * as toolbox from 'gluegun';
-import { create } from 'ipfs-http-client';
-import Compiler from '../compiler';
-import { GRAPH_CLI_SHARED_HEADERS } from '../constants';
-import Protocol from '../protocols';
+import Compiler from '../compiler/index.js';
+import { GRAPH_CLI_SHARED_HEADERS } from '../constants.js';
+import Protocol from '../protocols/index.js';
 
 interface CreateCompilerOptions {
   ipfs: string | URL | undefined;
@@ -33,7 +32,7 @@ export function appendApiVersionForGraph(inputString: string) {
 }
 
 // Helper function to construct a subgraph compiler
-export function createCompiler(
+export async function createCompiler(
   manifest: string,
   {
     ipfs,
@@ -54,6 +53,7 @@ The IPFS URL must be of the following format: http(s)://host[:port]/[path]`);
     return null;
   }
 
+  const create = (await import('kubo-rpc-client')).create;
   // Connect to the IPFS node (if a node address was provided)
   const ipfsClient = ipfs
     ? create({

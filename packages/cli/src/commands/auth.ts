@@ -1,7 +1,7 @@
-import { print } from 'gluegun';
+import { print, prompt } from 'gluegun';
 import { Args, Command, Flags, ux } from '@oclif/core';
-import { saveDeployKey } from '../command-helpers/auth';
-import { chooseNodeUrl } from '../command-helpers/node';
+import { saveDeployKey } from '../command-helpers/auth.js';
+import { chooseNodeUrl } from '../command-helpers/node.js';
 
 export default class AuthCommand extends Command {
   static description = 'Sets the deploy key to use when deploying to a Graph node.';
@@ -23,16 +23,19 @@ export default class AuthCommand extends Command {
 
     const { node } = chooseNodeUrl({});
 
-    // eslint-disable-next-line -- prettier has problems with ||=
-    deployKey =
-      deployKey ||
-      (await ux.prompt('What is the deploy key?', {
+    deployKey = await prompt.ask<string>([
+      {
+        type: 'invisible',
+        name: 'deployKey',
+        message: () => 'What is the deploy key?',
+        initial: deployKey,
         required: true,
-        type: 'mask',
-      }));
-    if (deployKey.length > 200) {
-      this.error('✖ Deploy key must not exceed 200 characters', { exit: 1 });
-    }
+        validate: value =>
+          value.length > 200
+            ? ux.error('✖ Deploy key must not exceed 200 characters', { exit: 1 })
+            : value,
+      },
+    ]);
 
     try {
       await saveDeployKey(node!, deployKey);
