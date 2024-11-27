@@ -67,7 +67,7 @@ export default class PublishCommand extends Command {
     protocolNetwork: string | undefined;
     apiKey: string | undefined;
   }) {
-    const openBrowser = await prompt.ask<{ openBrowser: boolean }>([
+    const { openBrowser } = await prompt.ask<{ openBrowser: boolean }>([
       {
         type: 'confirm',
         name: 'openBrowser',
