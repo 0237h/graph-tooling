@@ -93,7 +93,9 @@ export default class LocalCommand extends Command {
     const composeFile =
       composeFileFlag ||
       path.join(
-        `${process.platform === 'win32' ? '' : '/'}${/file:\/{2,3}(.+)\/[^/]/.exec(import.meta.url)![1]}`,
+        `${process.platform === 'win32' ? '' : '/'}${
+          /file:\/{2,3}(.+)\/[^/]/.exec(import.meta.url)![1]
+        }`,
         '..',
         '..',
         'resources',
