@@ -1123,22 +1123,22 @@ async function addAnotherContract(
     directory: string;
   },
 ) {
-  const addContractConfirmation = await prompt.ask<boolean>([
+  const { addAnother } = await prompt.ask<{ addAnother: boolean }>([
     {
       type: 'confirm',
-      name: 'addContractConfirmation',
+      name: 'addAnother',
       message: () => 'Add another contract? (y/n)',
       initial: false,
       required: true,
     },
   ]);
 
-  if (addContractConfirmation) {
+  if (addAnother) {
     const ProtocolContract = protocolInstance.getContract()!;
 
-    let contract = '';
+    let validContract = '';
     for (;;) {
-      contract = await prompt.ask<string>([
+      const { contract } = await prompt.ask<{ contract: string }>([
         {
           type: 'input',
           name: 'contract',
@@ -1149,6 +1149,7 @@ async function addAnotherContract(
       ]);
       const { valid, error } = validateContract(contract, ProtocolContract);
       if (valid) {
+        validContract = contract;
         break;
       }
       this.log(`✖ ${error}`);
@@ -1162,7 +1163,7 @@ async function addAnotherContract(
         process.chdir(directory);
       }
 
-      const commandLine = [contract];
+      const commandLine = [validContract];
 
       await AddCommand.run(commandLine);
     } catch (e) {
@@ -1173,5 +1174,5 @@ async function addAnotherContract(
     }
   }
 
-  return addContractConfirmation;
+  return addAnother;
 }

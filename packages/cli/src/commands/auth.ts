@@ -18,17 +18,17 @@ export default class AuthCommand extends Command {
 
   async run() {
     let {
-      args: { 'deploy-key': deployKey },
+      args: { 'deploy-key': initialDeployKey },
     } = await this.parse(AuthCommand);
 
     const { node } = chooseNodeUrl({});
 
-    deployKey = await prompt.ask<string>([
+    const { deployKey } = await prompt.ask<{ deployKey: string }>([
       {
         type: 'invisible',
         name: 'deployKey',
         message: () => 'What is the deploy key?',
-        initial: deployKey,
+        initial: initialDeployKey,
         required: true,
         validate: value =>
           value.length > 200

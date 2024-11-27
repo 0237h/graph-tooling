@@ -110,7 +110,7 @@ export default class DeployCommand extends Command {
       },
     } = await this.parse(DeployCommand);
 
-    const subgraphName = await prompt.ask<string>([
+    const subgraphName = await prompt.ask<{ subgraphName: string }>([
       {
         type: 'input',
         name: 'subgraphName',
@@ -151,7 +151,7 @@ export default class DeployCommand extends Command {
     }
 
     // Ask for label if not on hosted service
-    const versionLabel = await prompt.ask<string>([
+    const versionLabel = await prompt.ask<{ versionLabel: string }>([
       {
         type: 'input',
         name: 'versionLabel',
