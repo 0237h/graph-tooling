@@ -17,7 +17,7 @@ export default class AuthCommand extends Command {
   };
 
   async run() {
-    let {
+    const {
       args: { 'deploy-key': initialDeployKey },
     } = await this.parse(AuthCommand);
 
